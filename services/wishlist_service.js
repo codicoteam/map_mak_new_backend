@@ -1,4 +1,4 @@
-const WishList = require("../models/wishlist_model");
+const WishList = require("../models/wish_list_model");
 const mongoose = require("mongoose");
 
 const WishListService = {

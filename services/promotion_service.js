@@ -1,4 +1,4 @@
-const Promotion = require("../models/promotion_model");
+const Promotion = require("../models/promotions_model");
 const mongoose = require("mongoose");
 
 const PromotionService = {

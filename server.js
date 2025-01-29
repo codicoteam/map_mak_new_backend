@@ -13,6 +13,12 @@ const customer_centerRouter = require("./routers/customerCenter_router.js")
 const furniturePackRouter = require("./routers/furniture_package_router.js")
 const inviteRouter = require("./routers/invite_user_router.js")
 const makepaymentRouter = require("./routers/makepayment_router.js")
+const onDemandRouter = require("./routers/onDemand_router.js")
+const onDisplayRouter = require("./routers/onDisplay_router.js")
+const ordersRouter = require("./routers/orders_router.js")
+const promotionRouter = require("./routers/promotion_router.js")
+const quotationRouter = require("./routers/quotation_router.js")
+const wishListRouter = require("./routers/wishlist_router.js")
 
 const dbUrl = "mongodb://localhost:27017/FurnitureMapMak";
 app.use(express.json());
@@ -35,7 +41,12 @@ app.use("/api/v1/customercenter", customer_centerRouter);
 app.use("/api/v1/furniturepack", furniturePackRouter);
 app.use("/api/v1/invite", inviteRouter);
 app.use("/api/v1/make_payment", makepaymentRouter);
-
+app.use("/api/v1/onDemand", onDemandRouter);
+app.use("/api/v1/onDisplay", onDisplayRouter);
+app.use("/api/v1/order", ordersRouter);
+app.use("/api/v1/promotion", promotionRouter);
+app.use("/api/v1/quotation", quotationRouter);
+app.use("/api/v1/wishlist", wishListRouter);
 
 const port = 5050; // Correct capitalization
 app.listen(port, () => {
