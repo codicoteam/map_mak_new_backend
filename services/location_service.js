@@ -12,6 +12,11 @@ const LocationService = {
     }
     return { status: 200, data: updatedLocation };
   },
+  async getAllLocationsNoPagination() {
+    const locations = await Location.find();
+    return { status: 200, data: { locations } };
+  }
+  ,
 
   async deleteLocationByIds(locationIds) {
     const result = await Location.deleteMany({ _id: { $in: locationIds } });
@@ -66,31 +71,6 @@ const LocationService = {
     return { status: 200, data: { locations, total, page, size } };
   },
 
-  async searchByCountry(country, page = 1, size = 10) {
-    const skip = (page - 1) * size;
-    const locations = await Location.find({ country }).skip(skip).limit(size);
-    const total = await Location.countDocuments({ country });
-    if (!locations.length) {
-      return { status: 404, message: "No locations found in this country" };
-    }
-    return { status: 200, data: { locations, total, page, size } };
-  },
-
-  async searchByCoordinates(latitude, longitude, range = 1, page = 1, size = 10) {
-    const skip = (page - 1) * size;
-    const locations = await Location.find({
-      latitude: { $gte: latitude - range, $lte: latitude + range },
-      longitude: { $gte: longitude - range, $lte: longitude + range }
-    }).skip(skip).limit(size);
-    const total = await Location.countDocuments({
-      latitude: { $gte: latitude - range, $lte: latitude + range },
-      longitude: { $gte: longitude - range, $lte: longitude + range }
-    });
-    if (!locations.length) {
-      return { status: 404, message: "No locations found within the specified coordinates" };
-    }
-    return { status: 200, data: { locations, total, page, size } };
-  }
 };
 
 module.exports = LocationService;

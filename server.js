@@ -19,6 +19,7 @@ const ordersRouter = require("./routers/orders_router.js")
 const promotionRouter = require("./routers/promotion_router.js")
 const quotationRouter = require("./routers/quotation_router.js")
 const wishListRouter = require("./routers/wishlist_router.js")
+const locationRouter = require("./routers/location_router.js")
 
 const dbUrl = "mongodb://localhost:27017/FurnitureMapMak";
 app.use(express.json());
@@ -47,6 +48,8 @@ app.use("/api/v1/order", ordersRouter);
 app.use("/api/v1/promotion", promotionRouter);
 app.use("/api/v1/quotation", quotationRouter);
 app.use("/api/v1/wishlist", wishListRouter);
+app.use("/api/v1/locaation", locationRouter);
+
 
 const port = 5050; // Correct capitalization
 app.listen(port, () => {
