@@ -21,7 +21,7 @@ const quotationRouter = require("./routers/quotation_router.js")
 const wishListRouter = require("./routers/wishlist_router.js")
 const locationRouter = require("./routers/location_router.js")
 
-const dbUrl = "mongodb://localhost:27017/FurnitureMapMak";
+const dbUrl = "mongodb+srv://prince:clinpride@cluster0.sg3km.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"";
 app.use(express.json());
 
 
