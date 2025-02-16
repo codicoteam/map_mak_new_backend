@@ -6,7 +6,9 @@ const PromotionService = {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return { status: 400, message: "Invalid promotion ID" };
     }
-    const updatedPromotion = await Promotion.findByIdAndUpdate(id, promotionData, { new: true });
+    const updatedPromotion = await Promotion.findByIdAndUpdate(id, promotionData, { new: true })
+      .populate("productCategories")
+      .populate("productLocation");
     if (!updatedPromotion) {
       return { status: 404, message: "Promotion not found" };
     }
@@ -40,7 +42,11 @@ const PromotionService = {
 
   async getAllPromotions(page = 1, size = 10) {
     const skip = (page - 1) * size;
-    const promotions = await Promotion.find().skip(skip).limit(size);
+    const promotions = await Promotion.find()
+      .populate("productCategories")
+      .populate("productLocation")
+      .skip(skip)
+      .limit(size);
     const total = await Promotion.countDocuments();
     return { status: 200, data: { promotions, total, page, size } };
   },
@@ -49,7 +55,9 @@ const PromotionService = {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return { status: 400, message: "Invalid promotion ID" };
     }
-    const promotion = await Promotion.findById(id);
+    const promotion = await Promotion.findById(id)
+      .populate("productCategories")
+      .populate("productLocation");
     if (!promotion) {
       return { status: 404, message: "Promotion not found" };
     }
@@ -59,6 +67,8 @@ const PromotionService = {
   async searchPromotionByName(name, page = 1, size = 10) {
     const skip = (page - 1) * size;
     const promotions = await Promotion.find({ productName: { $regex: name, $options: "i" } })
+      .populate("productCategories")
+      .populate("productLocation")
       .skip(skip)
       .limit(size);
     const total = await Promotion.countDocuments({ productName: { $regex: name, $options: "i" } });
@@ -70,7 +80,11 @@ const PromotionService = {
 
   async searchPromotionByCategory(categoryId, page = 1, size = 10) {
     const skip = (page - 1) * size;
-    const promotions = await Promotion.find({ productCategories: categoryId }).skip(skip).limit(size);
+    const promotions = await Promotion.find({ productCategories: categoryId })
+      .populate("productCategories")
+      .populate("productLocation")
+      .skip(skip)
+      .limit(size);
     const total = await Promotion.countDocuments({ productCategories: categoryId });
     if (!promotions.length) {
       return { status: 404, message: "No promotions found in this category" };
@@ -81,6 +95,8 @@ const PromotionService = {
   async filterPromotionsByPriceRange(minPrice, maxPrice, page = 1, size = 10) {
     const skip = (page - 1) * size;
     const promotions = await Promotion.find({ productPrice: { $gte: minPrice, $lte: maxPrice } })
+      .populate("productCategories")
+      .populate("productLocation")
       .skip(skip)
       .limit(size);
     const total = await Promotion.countDocuments({ productPrice: { $gte: minPrice, $lte: maxPrice } });
@@ -93,6 +109,8 @@ const PromotionService = {
   async filterPromotionsByDiscountRange(minDiscount, maxDiscount, page = 1, size = 10) {
     const skip = (page - 1) * size;
     const promotions = await Promotion.find({ productDiscount: { $gte: minDiscount, $lte: maxDiscount } })
+      .populate("productCategories")
+      .populate("productLocation")
       .skip(skip)
       .limit(size);
     const total = await Promotion.countDocuments({ productDiscount: { $gte: minDiscount, $lte: maxDiscount } });

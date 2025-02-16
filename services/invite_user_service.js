@@ -15,8 +15,8 @@ const InviteUserService = {
       const transporter = nodemailer.createTransport({
         service: "gmail", // or another email service
         auth: {
-          user: process.env.EMAIL_USER, // Your email address
-          pass: process.env.EMAIL_PASS, // Your email password or app password
+          user: "mapmaksoftwaresolutions@gmail.com", // Your email address
+          pass: "drphypohowmrpspg", // Your email password or app password
         },
       });
 

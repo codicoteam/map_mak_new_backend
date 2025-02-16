@@ -1,15 +1,34 @@
 const mongoose = require("mongoose");
-
 const OrderSchema = new mongoose.Schema(
   {
     orderId: {
       type: String,
-      default: () => Math.random().toString(36).substring(2, 8).toUpperCase(), // Generate a random alphanumeric string
+      default: () => Math.random().toString(36).substring(2, 8).toUpperCase(), 
     },
     products: [
       {
-        type: mongoose.Schema.Types.Mixed, // This can be replaced with a specific schema reference if `ProductsModel` has its own schema
-        required: false,
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: false,
+          refPath: "products.productModel", // Dynamic reference
+        },
+        productModel: {
+          type: String,
+          required: true,
+          enum: ["Product", "BulkBuying", "OnDemand"], // Allowed models
+        },
+        productName:{
+          type: String,
+          required: false,
+        },
+        productPrice:{
+          type: String,
+          required: false,
+        },
+        productImages:[{
+          type: String,
+          required: false,
+        }]
       },
     ],
     orderTotal: {
@@ -23,10 +42,6 @@ const OrderSchema = new mongoose.Schema(
     customerPhoneNumber: {
       type: String,
       required: true,
-    },
-    PostalCode: {
-      type: String,
-      required: false,
     },
     customerLocation: {
       type: String,
@@ -48,29 +63,17 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    mapLongitudes: {
-      type: String,
-      required: false,
-    },
-    mapLatitudes: {
-      type: String,
-      required: false,
-    },
-    comment: {
-      type: String,
-      required: false,
-    },
     dateNow: {
       type: String,
-      default: () => new Date().toISOString().split("T")[0], // Set default as the current date in YYYY-MM-DD format
+      default: () => new Date().toISOString().split("T")[0], 
     },
     orderTime: {
       type: String,
-      default: () => new Date().toISOString().split("T")[1], // Set default as the current time
+      default: () => new Date().toISOString().split("T")[1], 
     },
   },
   {
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 

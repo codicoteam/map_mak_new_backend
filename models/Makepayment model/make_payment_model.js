@@ -1,29 +1,5 @@
 const mongoose = require("mongoose");
 
-const BoughtGoodsSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-    },
-    productPrice: {
-      type: Number,
-      required: true,
-    },
-  },
-  {
-    _id: false, // Prevents Mongoose from creating an `_id` for each subdocument
-  }
-);
-
 const MakePaymentSchema = new mongoose.Schema(
   {
     pollUrl: {
@@ -44,8 +20,22 @@ const MakePaymentSchema = new mongoose.Schema(
     },
     furnitureBought: [
       {
-        type: BoughtGoodsSchema, // Embedding BoughtGoods schema
-        required: true,
+        name: {
+          type: String,
+          required: true,
+        },
+        description: {
+          type: String,
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        productPrice: {
+          type: Number,
+          required: true,
+        },
       },
     ],
     Goods: {

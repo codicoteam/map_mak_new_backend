@@ -12,9 +12,30 @@ const WishListSchema = new mongoose.Schema(
     },
     products: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product", // Reference to the Product model
-        required: false, // Products are optional
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: false,
+          refPath: "products.productModel", // Dynamic reference
+        },
+        productModel: {
+          type: String,
+          required: true,
+          enum: ["Product", "BulkBuying", "OnDemand"], // Allowed models
+        },
+        productName: {
+          type: String,
+          required: false,
+        },
+        productPrice: {
+          type: String,
+          required: false,
+        },
+        productImages: [
+          {
+            type: String,
+            required: false,
+          },
+        ],
       },
     ],
     wishListTotal: {
@@ -62,4 +83,3 @@ const WishListSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("WishList", WishListSchema);
-

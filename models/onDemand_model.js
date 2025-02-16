@@ -71,7 +71,7 @@ const OnDemandSchema = new mongoose.Schema(
       type: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Category", // Reference to the Product model
+          ref: "Category", // Refereance to the Product model
           required: false, // Products are optional
         },
       ],

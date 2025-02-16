@@ -5,7 +5,9 @@ const nodemailer = require("nodemailer");
 const HiringService = {
   async hireProducts(hiringData) {
     try {
-      const productNames = hiringData.products.map((product) => product.productName).join(", ");
+      const productNames = hiringData.products
+        .map((product) => product.productName)
+        .join(", ");
 
       const newHiring = new Hiring(hiringData);
       const savedHiring = await newHiring.save();
@@ -14,14 +16,14 @@ const HiringService = {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "your-email@gmail.com", // Replace with your email
-          pass: "your-email-password", // Replace with your email password or app password
+          user: "mapmaksoftwaresolutions@gmail.com", // Replace with your email
+          pass: "drphypohowmrpspg", // Replace with your email password or app password
         },
       });
 
       // Email to customer
       const customerMailOptions = {
-        from: "your-email@gmail.com",
+        from: "mapmaksoftwaresolutions@gmail.com",
         to: hiringData.customerEmail,
         subject: "Booking Confirmation - Successful Order Placement",
         text: `We are delighted to inform you that your order has been successfully placed. Thank you for choosing our services!
@@ -44,8 +46,8 @@ MapMak Furniture`,
 
       // Email to owner
       const ownerMailOptions = {
-        from: "your-email@gmail.com",
-        to: "zpmakaza@gmail.com", // Replace with owner's email
+        from: "mapmaksoftwaresolutions@gmail.com",
+        to: hiringData.customerEmail, // Replace with owner's email
         subject: "New Order Notification",
         text: `A hiring order has been made by a customer.
 
@@ -62,7 +64,11 @@ Please check your Dashboard on the MapMak Furniture App for more details.`,
 
       await transporter.sendMail(ownerMailOptions);
 
-      return { status: 200, message: "Hiring saved successfully", data: savedHiring };
+      return {
+        status: 200,
+        message: "Hiring saved successfully",
+        data: savedHiring,
+      };
     } catch (error) {
       console.error(error);
       return { status: 500, message: "Order saving failed", error };
@@ -92,7 +98,9 @@ Please check your Dashboard on the MapMak Furniture App for more details.`,
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return { status: 400, message: "Invalid hiring ID" };
     }
-    const updatedHiring = await Hiring.findByIdAndUpdate(id, hiringData, { new: true });
+    const updatedHiring = await Hiring.findByIdAndUpdate(id, hiringData, {
+      new: true,
+    });
     if (!updatedHiring) {
       return { status: 404, message: "Hiring not found" };
     }
@@ -111,7 +119,9 @@ Please check your Dashboard on the MapMak Furniture App for more details.`,
   },
 
   async getHiringByOrderId(orderId) {
-    const hiring = await Hiring.findOne({ hiringId: orderId }).populate("products");
+    const hiring = await Hiring.findOne({ hiringId: orderId }).populate(
+      "products"
+    );
     if (!hiring) {
       return { status: 404, message: "Hiring not found" };
     }
