@@ -43,8 +43,8 @@ router.delete("/", async (req, res) => {
 });
 
 router.get("/search/category", async (req, res) => {
-  const { categoryName, page, size } = req.query;
-  const response = await ProductService.searchCategory(categoryName, parseInt(page), parseInt(size));
+  const { categoryId, page, size } = req.query;
+  const response = await ProductService.searchCategory(categoryId, parseInt(page), parseInt(size));
   handleResponse(res, response);
 });
 

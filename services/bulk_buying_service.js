@@ -6,7 +6,11 @@ const BulkBuyingService = {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return { status: 400, message: "Invalid BulkBuying ID" };
     }
-    const updatedBulkBuying = await BulkBuying.findByIdAndUpdate(id, bulkBuyingData, { new: true });
+    const updatedBulkBuying = await BulkBuying.findByIdAndUpdate(
+      id,
+      bulkBuyingData,
+      { new: true }
+    );
     if (!updatedBulkBuying) {
       return { status: 404, message: "BulkBuying not found" };
     }
@@ -38,48 +42,76 @@ const BulkBuyingService = {
     return { status: 201, data: savedBulkBuying };
   },
 
-
-
   async searchColor(color, page = 1, size = 10) {
     const skip = (page - 1) * size;
-    const bulkBuyings = await BulkBuying.find({ colors: color }).skip(skip).limit(size);
+    const bulkBuyings = await BulkBuying.find({ colors: color })
+      .skip(skip)
+      .limit(size);
     const total = await BulkBuying.countDocuments({ colors: color });
     if (!bulkBuyings.length) {
-      return { status: 404, message: "No BulkBuying records found with this color" };
+      return {
+        status: 404,
+        message: "No BulkBuying records found with this color",
+      };
     }
     return { status: 200, data: { bulkBuyings, total, page, size } };
   },
   async rangePrice(minPrice, maxPrice, page = 1, size = 10) {
     const skip = (page - 1) * size;
-    const bulkBuyings = await BulkBuying.find({ bulkBuyingPrice: { $gte: minPrice, $lte: maxPrice } }).skip(skip).limit(size);
-    const total = await BulkBuying.countDocuments({ bulkBuyingPrice: { $gte: minPrice, $lte: maxPrice } });
+    const bulkBuyings = await BulkBuying.find({
+      bulkBuyingPrice: { $gte: minPrice, $lte: maxPrice },
+    })
+      .skip(skip)
+      .limit(size);
+    const total = await BulkBuying.countDocuments({
+      bulkBuyingPrice: { $gte: minPrice, $lte: maxPrice },
+    });
     if (!bulkBuyings.length) {
-      return { status: 404, message: "No BulkBuying records found in this price range" };
+      return {
+        status: 404,
+        message: "No BulkBuying records found in this price range",
+      };
     }
     return { status: 200, data: { bulkBuyings, total, page, size } };
   },
 
   async searchByFeature(feature, page = 1, size = 10) {
     const skip = (page - 1) * size;
-    const bulkBuyings = await BulkBuying.find({ "bulkBuyingAttributes.feature": feature }).skip(skip).limit(size);
-    const total = await BulkBuying.countDocuments({ "bulkBuyingAttributes.feature": feature });
+    const bulkBuyings = await BulkBuying.find({
+      "bulkBuyingAttributes.feature": feature,
+    })
+      .skip(skip)
+      .limit(size);
+    const total = await BulkBuying.countDocuments({
+      "bulkBuyingAttributes.feature": feature,
+    });
     if (!bulkBuyings.length) {
-      return { status: 404, message: "No BulkBuying records found with this feature" };
+      return {
+        status: 404,
+        message: "No BulkBuying records found with this feature",
+      };
     }
     return { status: 200, data: { bulkBuyings, total, page, size } };
   },
 
   async rangeDiscount(minDiscount, maxDiscount, page = 1, size = 10) {
     const skip = (page - 1) * size;
-    const bulkBuyings = await BulkBuying.find({ bulkBuyingDiscount: { $gte: minDiscount, $lte: maxDiscount } }).skip(skip).limit(size);
-    const total = await BulkBuying.countDocuments({ bulkBuyingDiscount: { $gte: minDiscount, $lte: maxDiscount } });
+    const bulkBuyings = await BulkBuying.find({
+      bulkBuyingDiscount: { $gte: minDiscount, $lte: maxDiscount },
+    })
+      .skip(skip)
+      .limit(size);
+    const total = await BulkBuying.countDocuments({
+      bulkBuyingDiscount: { $gte: minDiscount, $lte: maxDiscount },
+    });
     if (!bulkBuyings.length) {
-      return { status: 404, message: "No BulkBuying records found in this discount range" };
+      return {
+        status: 404,
+        message: "No BulkBuying records found in this discount range",
+      };
     }
     return { status: 200, data: { bulkBuyings, total, page, size } };
   },
-
-
 
   async getAllBulkBuying(page = 1, size = 10) {
     const skip = (page - 1) * size;
@@ -105,35 +137,49 @@ const BulkBuyingService = {
     return { status: 200, data: bulkBuying };
   },
 
-  async searchCategory(categoryName, page = 1, size = 10) {
+  async searchCategory(categoryId, page = 1, size = 10) {
     const skip = (page - 1) * size;
-    const bulkBuyings = await BulkBuying.find({ "bulkBuyingCategories.name": categoryName })
+    const bulkBuyings = await BulkBuying.find({
+      bulkBuyingCategories: categoryId, // Search by category ID
+    })
       .populate("Location") // Populate Location reference
       .populate("bulkBuyingCategories") // Populate bulkBuyingCategories reference
       .skip(skip)
       .limit(size);
-    const total = await BulkBuying.countDocuments({ "bulkBuyingCategories.name": categoryName });
+
+    const total = await BulkBuying.countDocuments({
+      bulkBuyingCategories: categoryId, // Count bulk products by category ID
+    });
+
     if (!bulkBuyings.length) {
-      return { status: 404, message: "No BulkBuying records found in this category" };
+      return {
+        status: 404,
+        message: "No BulkBuying records found in this category",
+      };
     }
+
     return { status: 200, data: { bulkBuyings, total, page, size } };
   },
-
   async searchType(type, page = 1, size = 10) {
     const skip = (page - 1) * size;
-    const bulkBuyings = await BulkBuying.find({ "bulkBuyingAttributes.type": type })
+    const bulkBuyings = await BulkBuying.find({
+      "bulkBuyingAttributes.type": type,
+    })
       .populate("Location") // Populate Location reference
       .populate("bulkBuyingCategories") // Populate bulkBuyingCategories reference
       .skip(skip)
       .limit(size);
-    const total = await BulkBuying.countDocuments({ "bulkBuyingAttributes.type": type });
+    const total = await BulkBuying.countDocuments({
+      "bulkBuyingAttributes.type": type,
+    });
     if (!bulkBuyings.length) {
-      return { status: 404, message: "No BulkBuying records found of this type" };
+      return {
+        status: 404,
+        message: "No BulkBuying records found of this type",
+      };
     }
     return { status: 200, data: { bulkBuyings, total, page, size } };
   },
-
-
 };
 
 module.exports = BulkBuyingService;

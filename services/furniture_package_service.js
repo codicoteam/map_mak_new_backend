@@ -147,24 +147,27 @@ const PackageService = {
     return { status: 200, data: package };
   },
 
-  async searchPackageCategory(categoryName, page = 1, size = 10) {
+  async searchPackageCategory(categoryId, page = 1, size = 10) {
     const skip = (page - 1) * size;
     const packages = await PackageModels.find({
-      "packageCategories.name": categoryName,
+      packageCategories: categoryId, // Search by category ID
     })
       .populate("Location")
       .populate("packageCategories")
       .skip(skip)
       .limit(size);
-
+  
     const total = await PackageModels.countDocuments({
-      "packageCategories.name": categoryName,
+      packageCategories: categoryId, // Count packages by category ID
     });
+  
     if (!packages.length) {
       return { status: 404, message: "No packages found in this category" };
     }
+  
     return { status: 200, data: { packages, total, page, size } };
-  },
+  }
+  
 };
 
 module.exports = PackageService;

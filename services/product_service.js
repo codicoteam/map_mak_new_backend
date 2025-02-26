@@ -145,24 +145,26 @@ const ProductService = {
     return { status: 200, data: product };
   },
 
-  async searchCategory(categoryName, page = 1, size = 10) {
+  async searchCategory(categoryId, page = 1, size = 10) {
     const skip = (page - 1) * size;
     const products = await Product.find({
-      "productCategories.name": categoryName,
+      productCategories: categoryId, // Search by category ID
     })
       .populate("productCategories")
       .populate("productLocation")
       .skip(skip)
       .limit(size);
+
     const total = await Product.countDocuments({
-      "productCategories.name": categoryName,
+      productCategories: categoryId, // Count products by category ID
     });
+
     if (!products.length) {
       return { status: 404, message: "No products found in this category" };
     }
+
     return { status: 200, data: { products, total, page, size } };
   },
-
   async searchColor(color, page = 1, size = 10) {
     const skip = (page - 1) * size;
     const products = await Product.find({ colors: color })
