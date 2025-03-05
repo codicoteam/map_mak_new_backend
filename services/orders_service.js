@@ -13,14 +13,14 @@ const OrderService = {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "your-email@example.com", // Replace with your email
-          pass: "your-email-password", // Replace with your email password or OAuth token
+          user: "mapmaksoftwaresolutions@gmail.com", // Replace with your email
+          pass: "drphypohowmrpspg", // Replace with your email password or OAuth token
         },
       });
 
       // Email to customer
       const customerMessage = {
-        from: "your-email@example.com",
+        from: "mapmaksoftwaresolutions@gmail.com",
         to: orderData.customerEmail,
         subject: "Order Confirmation - Successful Order Placement",
         text: `
@@ -42,8 +42,8 @@ const OrderService = {
 
       // Email to owner
       const ownerMessage = {
-        from: "your-email@example.com",
-        to: "owner-email@example.com", // Replace with the owner's email
+        from: "mapmaksoftwaresolutions@gmail.com",
+        to: orderData.customerEmail, // Replace with the owner's email
         subject: "New Order Notification",
         text: `
           A new order has been placed by a customer.
